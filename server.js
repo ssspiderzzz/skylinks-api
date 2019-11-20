@@ -42,10 +42,8 @@ App.get("/api/data", (req, res) => {
 
 App.get("/api/textures/:id", (req, res, next) => {
   const texture = req.params.id;
-  console.log(`check texture id:${req.params.id}`);
   if (__dirname + "/textures/" + texture)
-    console.log(`check texture loading status`);
-  res.sendFile(__dirname + "/textures/" + texture);
+    res.sendFile(__dirname + "/textures/" + texture);
 });
 
 App.get("/with-cors/:id", (req, res, next) => {
