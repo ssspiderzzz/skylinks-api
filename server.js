@@ -118,18 +118,33 @@ App.get("/api/real/from/:from/to/:to", (req, res) => {
   );
 });
 
+// previous schedules api is no longer working since 2020
+
+// App.get("/api/schedules/from/:from/to/:to", (req, res) => {
+//   const from = req.params.from;
+//   const to = req.params.to;
+//   const now = new Date();
+//   const y = now.getYear() + 1900;
+//   const m = now.getMonth() + 1;
+//   const d = now.getDate();
+//   axios
+//     .get(
+//       `https://api.flightstats.com/flex/schedules/rest/v1/json/from/${from}/to/${to}/departing/${y}/${m}/${d}?appId=${process.env.appId}&appKey=${process.env.appKey}`
+//     )
+//     .then(api => {
+//       res.json(api.data);
+//     })
+//     .catch(err => {
+//       console.log(err);
+//     });
+// });
+
 App.get("/api/schedules/from/:from/to/:to", (req, res) => {
   const from = req.params.from;
   const to = req.params.to;
-  const now = new Date();
-  const y = now.getYear() + 1900;
-  const m = now.getMonth() + 1;
-  const d = now.getDate();
-  // res.json(spidertest);
+  const getSheduleUrl = `http://api.aviationstack.com/v1/flights?access_key=${process.env.aviationstackAppKey}&dep_iata=${from}&arr_iata=${to}`
   axios
-    .get(
-      `https://api.flightstats.com/flex/schedules/rest/v1/json/from/${from}/to/${to}/departing/${y}/${m}/${d}?appId=${process.env.appId}&appKey=${process.env.appKey}`
-    )
+    .get(getSheduleUrl)
     .then(api => {
       res.json(api.data);
     })
