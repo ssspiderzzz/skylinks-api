@@ -54,6 +54,7 @@ App.get("/with-cors/:id", (req, res, next) => {
 });
 
 App.get("/api/airports/:id", (req, res) => {
+  console.log('debug get airport id: ', req.params.id)
   const airport = req.params.id;
   const findDepartureCoords = {
     text: `
@@ -77,6 +78,7 @@ App.get("/api/airports/:id", (req, res) => {
     .query(findDepartureCoords)
     .then(depart => {
       pool.query(findArrivalCoords).then(arrive => {
+        console.log('query sucessfully get data from database: ', arrive.rows)
         res.headers.add('Access-Control-Allow-Origin', '*')
         res.json({
           departure: depart.rows[0],
