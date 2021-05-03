@@ -77,6 +77,7 @@ App.get("/api/airports/:id", (req, res) => {
     .query(findDepartureCoords)
     .then(depart => {
       pool.query(findArrivalCoords).then(arrive => {
+        res.headers.add('Access-Control-Allow-Origin', '*')
         res.json({
           departure: depart.rows[0],
           arrival: arrive.rows
