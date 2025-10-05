@@ -11,7 +11,6 @@ const dbParams = require("./db_config");
 // connect database
 const pool = new Pool(dbParams);
 pool.connect((error, client) => {
-  console.log(process.env.DB_HOST);
   if (error) {
     console.log(error);
   } else {
@@ -34,10 +33,10 @@ const promise = new Promise((resolve, reject) => {
             item.longitude,
             item.countrycode,
             item.countryname,
-            item.city
+            item.city,
           ]
         )
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     }
@@ -54,7 +53,7 @@ const promise = new Promise((resolve, reject) => {
           [i.STOPS, i.START_AIRPORT, i.DESTINATION_AIRPORT]
         )
         .then(() => k++)
-        .catch(err => {
+        .catch((err) => {
           j++;
           console.log("error when seeding routes", j, "at routes #", k);
           // console.log(err);
@@ -73,7 +72,7 @@ for (const item of airlines.airlines) {
         `INSERT INTO airlines (fs, name, iata, icao) VALUES ($1, $2, $3, $4)`,
         [item.fs, item.name, item.iata, item.icao]
       )
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }
 }
 
@@ -86,14 +85,14 @@ for (const item of flights.scheduledFlights) {
       item.departureAirportFsCode,
       item.arrivalAirportFsCode,
       item.departureTime,
-      item.arrivalTime
+      item.arrivalTime,
     ]
   );
 }
 
 // loop through waypoint folder and seed the database with waypoints
 
-fs.readdirSync(waypointfolder).forEach(file => {
+fs.readdirSync(waypointfolder).forEach((file) => {
   const filename = file.slice(0, 7);
   const [departure, arrival] = filename.split("_");
 
@@ -110,7 +109,7 @@ fs.readdirSync(waypointfolder).forEach(file => {
         waypoint.Altitude,
         waypoint.Direction,
         departure,
-        arrival
+        arrival,
       ]
     );
   }

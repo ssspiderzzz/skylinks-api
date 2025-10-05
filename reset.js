@@ -7,7 +7,6 @@ const dbParams = require("./db_config");
 const db = new Pool(dbParams);
 
 db.connect((error, client) => {
-  console.log(process.env.DB_HOST);
   if (error) {
     console.log(error);
   } else {
@@ -20,7 +19,7 @@ function read(file) {
     fs.readFile(
       file,
       {
-        encoding: "utf-8"
+        encoding: "utf-8",
       },
       (error, data) => {
         if (error) return reject(error);
@@ -31,13 +30,13 @@ function read(file) {
 }
 
 Promise.resolve(read(path.resolve(__dirname, `db/schema/create.sql`)))
-  .then(schema => {
+  .then((schema) => {
     db.query(schema).then(() => {
       console.log(`Database has been reset successfully!`);
       db.end();
       process.exit(0);
     });
   })
-  .catch(error => {
+  .catch((error) => {
     console.log(`Error setting up the reset route: ${error}`);
   });
