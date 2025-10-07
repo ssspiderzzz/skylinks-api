@@ -19,7 +19,7 @@ pool.connect((error, client) => {
   }
 });
 
-App.use(function(req, res, next) {
+App.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
@@ -36,7 +36,7 @@ App.use(Express.static("public"));
 // Sample GET route
 App.get("/api/data", (req, res) => {
   res.json({
-    message: "Seems to work!"
+    message: "Seems to work!",
   });
 });
 
@@ -54,14 +54,14 @@ App.get("/with-cors/:id", (req, res, next) => {
 });
 
 App.get("/api/airports/:id", (req, res) => {
-  console.log('debug get airport id: ', req.params.id)
+  console.log("debug get airport id: ", req.params.id);
   const airport = req.params.id;
   const findDepartureCoords = {
     text: `
     SELECT fs, name, latitude, longitude FROM airports 
     WHERE fs = $1;
     `,
-    values: [airport]
+    values: [airport],
   };
   const findArrivalCoords = {
     text: `
@@ -71,22 +71,25 @@ App.get("/api/airports/:id", (req, res) => {
     JOIN routes ON routes.departure_iata = airports.fs 
     WHERE routes.stops = 0 AND airports.fs = $1);
     `,
-    values: [airport]
+    values: [airport],
   };
 
   pool
     .query(findDepartureCoords)
-    .then(depart => {
-      pool.query(findArrivalCoords).then(arrive => {
-        console.log('query sucessfully get data from database: ', arrive.rows)
-        res.headers.add('Access-Control-Allow-Origin', '*')
+    .then((depart) => {
+      pool.query(findArrivalCoords).then((arrive) => {
+        console.log(
+          "query sucessfully get data from database: ",
+          arrive.rows.length
+        );
+        res.headers.set("Access-Control-Allow-Origin", "*");
         res.json({
           departure: depart.rows[0],
-          arrival: arrive.rows
+          arrival: arrive.rows,
         });
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
 });
@@ -111,8 +114,8 @@ App.get("/api/real/from/:from/to/:to", (req, res) => {
               latitude: currentLatitude,
               longitude: currentLongitude,
               altitude: item.altitude,
-              direction: item.direction
-            }
+              direction: item.direction,
+            },
           });
         }
         res.json(waypoints);
@@ -145,13 +148,13 @@ App.get("/api/real/from/:from/to/:to", (req, res) => {
 App.get("/api/schedules/from/:from/to/:to", (req, res) => {
   const from = req.params.from;
   const to = req.params.to;
-  const getSheduleUrl = `http://api.aviationstack.com/v1/flights?access_key=${process.env.aviationstackAppKey}&dep_iata=${from}&arr_iata=${to}`
+  const getSheduleUrl = `http://api.aviationstack.com/v1/flights?access_key=${process.env.aviationstackAppKey}&dep_iata=${from}&arr_iata=${to}`;
   axios
     .get(getSheduleUrl)
-    .then(api => {
+    .then((api) => {
       res.json(api.data);
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
 });
