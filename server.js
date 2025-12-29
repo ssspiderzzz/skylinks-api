@@ -19,17 +19,14 @@ pool.connect((error, client) => {
   }
 });
 
-App.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+const corsOptions = {
+  origin: 'https://skylinks.netlify.app',
+  optionsSuccessStatus: 200 
+};
+
+App.use(cors(corsOptions));
 
 // Express Configuration
-App.use(cors());
 App.use(BodyParser.urlencoded({ extended: false }));
 App.use(Express.static("public"));
 
