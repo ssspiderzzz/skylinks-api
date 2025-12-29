@@ -19,8 +19,22 @@ pool.connect((error, client) => {
   }
 });
 
+const allowedOrigins = [
+  'https://skylinks.netlify.app',  // Production
+  'http://localhost:3000'         // Local Development
+];
+
 const corsOptions = {
-  origin: 'https://skylinks.netlify.app',
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   optionsSuccessStatus: 200 
 };
 
