@@ -79,7 +79,6 @@ App.get("/api/airports/:id", (req, res) => {
           "query sucessfully get data from database: ",
           arrive.rows.length
         );
-        res.headers.set("Access-Control-Allow-Origin", "*");
         res.json({
           departure: depart.rows[0],
           arrival: arrive.rows,
