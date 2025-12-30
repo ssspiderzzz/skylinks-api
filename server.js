@@ -158,7 +158,7 @@ App.get("/api/real/from/:from/to/:to", (req, res) => {
 App.get("/api/schedules/from/:from/to/:to", (req, res) => {
   const from = req.params.from;
   const to = req.params.to;
-  const getSheduleUrl = `http://api.aviationstack.com/v1/flights?access_key=${process.env.aviationstackAppKey}&dep_iata=${from}&arr_iata=${to}`;
+  const getSheduleUrl = `http://api.aviationstack.com/v1/routes?access_key=${process.env.aviationstackAppKey}&dep_iata=${from}&arr_iata=${to}`;
   axios
     .get(getSheduleUrl)
     .then((api) => {
