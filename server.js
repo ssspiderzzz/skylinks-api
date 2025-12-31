@@ -11,7 +11,7 @@ const dbParams = require("./db_config");
 // connect database
 const pool = new Pool(dbParams);
 pool.connect((error, client) => {
-  console.log(process.env.DB_HOST);
+  console.log(process.env.DATABASE_URL);
   if (error) {
     console.log(error);
   } else {
@@ -134,31 +134,10 @@ App.get("/api/real/from/:from/to/:to", (req, res) => {
   );
 });
 
-// previous schedules api is no longer working since 2020
-
-// App.get("/api/schedules/from/:from/to/:to", (req, res) => {
-//   const from = req.params.from;
-//   const to = req.params.to;
-//   const now = new Date();
-//   const y = now.getYear() + 1900;
-//   const m = now.getMonth() + 1;
-//   const d = now.getDate();
-//   axios
-//     .get(
-//       `https://api.flightstats.com/flex/schedules/rest/v1/json/from/${from}/to/${to}/departing/${y}/${m}/${d}?appId=${process.env.appId}&appKey=${process.env.appKey}`
-//     )
-//     .then(api => {
-//       res.json(api.data);
-//     })
-//     .catch(err => {
-//       console.log(err);
-//     });
-// });
-
 App.get("/api/schedules/from/:from/to/:to", (req, res) => {
   const from = req.params.from;
   const to = req.params.to;
-  const getSheduleUrl = `http://api.aviationstack.com/v1/routes?access_key=${process.env.aviationstackAppKey}&dep_iata=${from}&arr_iata=${to}`;
+  const getSheduleUrl = `http://api.aviationstack.com/v1/flights?access_key=${process.env.aviationstackAppKey}&dep_iata=${from}&arr_iata=${to}`;
   axios
     .get(getSheduleUrl)
     .then((api) => {
